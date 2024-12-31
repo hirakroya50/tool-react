@@ -7,7 +7,12 @@ const Home = () => {
   return (
     <div>
       <h1>Count: {count}</h1>
-      <button onClick={() => setCount(count + 1)}>Increment</button>
+      <button
+        className="p-10 border border-red-600"
+        onClick={() => setCount(count + 1)}
+      >
+        Increment
+      </button>
       <button onClick={() => setCount(count - 1)}>Decrement</button>
     </div>
   );
