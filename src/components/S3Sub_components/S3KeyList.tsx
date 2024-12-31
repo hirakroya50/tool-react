@@ -7,10 +7,14 @@ const query = gql`
   }
 `;
 
-const S3KeyList = () => {
+const S3KeyList = ({
+  setSelectDataKey,
+}: {
+  setSelectDataKey: React.Dispatch<React.SetStateAction<string | null>>;
+}) => {
   const { data, loading, refetch, error } = useQuery(query);
 
-  console.log({ data: data?.listFiles, loading, refetch, error });
+  //   console.log({ data: data?.listFiles, loading, refetch, error });
 
   if (loading) return <p className="text-center text-blue-500">Loading...</p>;
   if (error)
@@ -26,6 +30,7 @@ const S3KeyList = () => {
               key={i}
               s3key={s3key}
               refetch={refetch}
+              setSelectDataKey={setSelectDataKey}
             />
           ))
         ) : (

@@ -2,7 +2,7 @@ import React from "react";
 
 import { gql, useMutation } from "@apollo/client";
 
-const DELETE_USER_MUTATION = gql`
+const DELETE_OBJECT = gql`
   mutation DeleteFile($fileKey: String!) {
     deleteFile(fileKey: $fileKey)
   }
@@ -10,12 +10,13 @@ const DELETE_USER_MUTATION = gql`
 const S3ListItemWithDeleteButton = ({
   refetch,
   s3key,
+  setSelectDataKey,
 }: {
   refetch: () => void;
   s3key: string;
+  setSelectDataKey: React.Dispatch<React.SetStateAction<string | null>>;
 }) => {
-  const [deleteFile, { data, loading, error }] =
-    useMutation(DELETE_USER_MUTATION);
+  const [deleteFile, { data, loading, error }] = useMutation(DELETE_OBJECT);
   const handleDelete = async (s3key: string) => {
     try {
       const res = await deleteFile({ variables: { fileKey: s3key } });
@@ -26,10 +27,15 @@ const S3ListItemWithDeleteButton = ({
       console.log("eerorr dekte", error);
     }
   };
-  console.log({ error });
   return (
-    <div className="flex justify-between items-center border p-2 rounded hover:bg-gray-100">
-      <span className="text-sm font-mono">{s3key}</span>
+    <div className="flex justify-between items-center gap-2 border p-2 rounded hover:bg-gray-100">
+      <span
+        title="click to open it "
+        className="text-sm font-mono border rounded-md p-1 cursor-pointer hover:bg-blue-500"
+        onClick={() => setSelectDataKey(s3key)}
+      >
+        {s3key}
+      </span>
       <button
         onClick={() => handleDelete(s3key)}
         className="text-white bg-red-500 px-3 py-1 rounded hover:bg-red-600"
