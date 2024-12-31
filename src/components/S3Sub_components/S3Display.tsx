@@ -1,5 +1,3 @@
-import React from "react";
-
 import { gql, useQuery } from "@apollo/client";
 
 const query = gql`
@@ -19,13 +17,17 @@ const S3Display = ({ selectDataKey }: { selectDataKey: string | null }) => {
     error,
   });
   if (!selectDataKey) {
-    return <section>No content</section>;
+    return (
+      <section className="text-center justify-center w-full flex items-center">
+        No content
+      </section>
+    );
   }
   return (
     <section>
       {data?.getFileUrl}
       {data?.getFileUrl && (
-        <div className="w-20 h-10">
+        <div className="w-64 border h-32">
           <img src={data?.getFileUrl} alt="" />
         </div>
       )}

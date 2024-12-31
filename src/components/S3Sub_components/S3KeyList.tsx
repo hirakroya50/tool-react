@@ -1,19 +1,20 @@
 import React from "react";
-import { gql, useQuery } from "@apollo/client";
 import S3ListItemWithDeleteButton from "./S3ListItemWithDeleteButton";
-const query = gql`
-  query listFiles {
-    listFiles
-  }
-`;
+import { ApolloError } from "@apollo/client";
 
 const S3KeyList = ({
   setSelectDataKey,
+  data,
+  error,
+  loading,
+  refetch,
 }: {
   setSelectDataKey: React.Dispatch<React.SetStateAction<string | null>>;
+  data: string[];
+  loading: boolean;
+  error: ApolloError | undefined;
+  refetch: () => void;
 }) => {
-  const { data, loading, refetch, error } = useQuery(query);
-
   //   console.log({ data: data?.listFiles, loading, refetch, error });
 
   if (loading) return <p className="text-center text-blue-500">Loading...</p>;
@@ -21,11 +22,14 @@ const S3KeyList = ({
     return <p className="text-center text-red-500">Error loading files!</p>;
 
   return (
-    <div className="p-4">
-      <h2 className="text-lg font-bold mb-4">S3 Key List</h2>
-      <div className="border rounded shadow-md p-4 space-y-2 bg-white">
-        {data?.listFiles?.length > 0 ? (
-          data?.listFiles?.map((s3key: string, i: number) => (
+    <div className="p-2 ">
+      <h2 className="text-lg font-bold text-center underline">
+        S3 object Key List
+      </h2>
+      <p className="text-blue-400 text-center">click object key to open</p>
+      <div className="border rounded shadow-md p-2 h-[calc(100vh-18rem)] overflow-auto space-y-2 bg-white">
+        {data?.length > 0 ? (
+          data?.map((s3key: string, i: number) => (
             <S3ListItemWithDeleteButton
               key={i}
               s3key={s3key}

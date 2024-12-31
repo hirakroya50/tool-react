@@ -16,7 +16,7 @@ const S3ListItemWithDeleteButton = ({
   s3key: string;
   setSelectDataKey: React.Dispatch<React.SetStateAction<string | null>>;
 }) => {
-  const [deleteFile, { data, loading, error }] = useMutation(DELETE_OBJECT);
+  const [deleteFile, { data, loading }] = useMutation(DELETE_OBJECT);
   const handleDelete = async (s3key: string) => {
     try {
       const res = await deleteFile({ variables: { fileKey: s3key } });

@@ -6,17 +6,42 @@ const About = () => <h1>About Page</h1>;
 const App: React.FC = () => {
   return (
     <BrowserRouter>
-      <div>
-        <nav>
-          <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-          <Link to="/s3">S3</Link>
+      <div className="min-h-screen bg-gray-50 flex flex-col">
+        <nav className="bg-blue-600  shadow-md">
+          <ul className="flex justify-center space-x-8">
+            <li>
+              <Link
+                to="/"
+                className="text-white font-semibold hover:text-blue-300 transition duration-300"
+              >
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/about"
+                className="text-white font-semibold hover:text-blue-300 transition duration-300"
+              >
+                About
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/s3"
+                className="text-white font-semibold hover:text-blue-300 transition duration-300"
+              >
+                S3
+              </Link>
+            </li>
+          </ul>
         </nav>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/s3" element={<S3Service />} />
-        </Routes>
+        <div className="grow flex flex-col">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/s3" element={<S3Service />} />
+          </Routes>
+        </div>
       </div>
     </BrowserRouter>
   );
