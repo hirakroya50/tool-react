@@ -1,16 +1,20 @@
 import { Routes, Route, Link, BrowserRouter } from "react-router-dom";
-import Home from "./components/Home";
-import S3Service from "./components/S3Service";
+import Home from "./pages/Home";
+import S3Service from "./pages/S3Service";
 import { Toaster } from "react-hot-toast";
 
-const About = () => <h1>About Page</h1>;
 const App: React.FC = () => {
   return (
     <BrowserRouter>
       <Toaster
-        position="bottom-right"
         toastOptions={{
           duration: 2000,
+        }}
+        containerStyle={{
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
         }}
       />
       <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -24,14 +28,7 @@ const App: React.FC = () => {
                 Home
               </Link>
             </li>
-            <li>
-              <Link
-                to="/about"
-                className="text-white font-semibold hover:text-blue-300 transition duration-300"
-              >
-                About
-              </Link>
-            </li>
+
             <li>
               <Link
                 to="/s3"
@@ -45,7 +42,6 @@ const App: React.FC = () => {
         <div className="grow flex flex-col">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
             <Route path="/s3" element={<S3Service />} />
           </Routes>
         </div>

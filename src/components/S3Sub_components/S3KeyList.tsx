@@ -21,8 +21,6 @@ const Content = ({
   error: ApolloError | undefined;
   refetch: () => void;
 }) => {
-  //   console.log({ data: data?.listFiles, loading, refetch, error });
-
   if (loading)
     return (
       <p className="text-center text-blue-500 pt-20 flex justify-center gap-2">

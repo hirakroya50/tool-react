@@ -1,7 +1,7 @@
 import { useState } from "react";
-import S3Display from "./S3Sub_components/S3Display";
-import S3KeyList from "./S3Sub_components/S3KeyList";
-import S3Upload from "./S3Sub_components/S3Upload";
+import S3Display from "../components/S3Sub_components/S3Display";
+import S3KeyList from "../components/S3Sub_components/S3KeyList";
+import S3Upload from "../components/S3Sub_components/S3Upload";
 import { gql, useQuery } from "@apollo/client";
 
 const query = gql`

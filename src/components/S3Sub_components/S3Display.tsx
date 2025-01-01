@@ -50,20 +50,25 @@ const DisplayData = ({
   return (
     <>
       <S3ObjectDownloadButton fileKey={selectDataKey?.fileKey} />
-      {data?.getFileUrl && (
-        <div className="w-[60%] border h-64">
-          {fileType === "image" && (
-            <img src={data.getFileUrl} alt="File" className=" w-full" />
-          )}
-          {fileType === "video" && (
-            <video controls className=" w-full">
-              <source src={data.getFileUrl} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
-          )}
-          {!fileType && <div>Unknown file type</div>}
-        </div>
-      )}
+      <div className="flex justify-center items-center gap-2">
+        <p className="font-semibold text-white shadow-sm bg-green-700 px-2 rounded-md">
+          No: {selectDataKey.slNo + 1}
+        </p>
+        {data?.getFileUrl && (
+          <div className="w-[60%] border h-64">
+            {fileType === "image" && (
+              <img src={data.getFileUrl} alt="File" className=" w-full" />
+            )}
+            {fileType === "video" && (
+              <video controls className=" w-full">
+                <source src={data.getFileUrl} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            )}
+            {!fileType && <div>Unknown file type</div>}
+          </div>
+        )}
+      </div>
       {error && <p>{error?.message}</p>}
     </>
   );

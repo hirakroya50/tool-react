@@ -96,7 +96,6 @@ const S3Upload = ({ refetch }: { refetch: () => void }) => {
       return;
     }
 
-    console.log({ uploadUrl, file });
     setUploadingState(true);
 
     try {
@@ -105,7 +104,6 @@ const S3Upload = ({ refetch }: { refetch: () => void }) => {
           "Content-Type": file.type, // Ensure the correct content type is sent
         },
       });
-      console.log({ response });
       if (response.status === 200) {
         toast.success("Successfully uploaded");
         setUploadUrl("");
@@ -163,7 +161,6 @@ const S3Upload = ({ refetch }: { refetch: () => void }) => {
               className="flex p-1 items-center file:cursor-pointer border border-yellow-700 file:p-0.5 file:px-2 file:mt-0.5 w-full text-sm text-gray-500   file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-200 file:text-black-900 hover:file:bg-blue-100"
               onChange={(e) => {
                 if (e.target.files) {
-                  console.log(e.target.files[0]);
                   setFile(e.target.files[0]);
                 }
               }}
