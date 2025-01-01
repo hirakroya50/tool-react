@@ -3,13 +3,7 @@ import S3ListItemWithDeleteButton from "./S3ListItemWithDeleteButton";
 import { ApolloError } from "@apollo/client";
 import { Loader } from "lucide-react";
 
-const Content = ({
-  setSelectDataKey,
-  data,
-  error,
-  loading,
-  refetch,
-}: {
+type ContentProps = {
   setSelectDataKey: React.Dispatch<
     React.SetStateAction<{
       slNo: number;
@@ -20,6 +14,14 @@ const Content = ({
   loading: boolean;
   error: ApolloError | undefined;
   refetch: () => void;
+};
+
+const Content: React.FC<ContentProps> = ({
+  setSelectDataKey,
+  data,
+  error,
+  loading,
+  refetch,
 }) => {
   if (loading)
     return (
@@ -57,23 +59,12 @@ const Content = ({
   );
 };
 
-const S3KeyList = ({
+const S3KeyList: React.FC<ContentProps> = ({
   setSelectDataKey,
   data,
   error,
   loading,
   refetch,
-}: {
-  setSelectDataKey: React.Dispatch<
-    React.SetStateAction<{
-      slNo: number;
-      fileKey: string;
-    } | null>
-  >;
-  data: string[];
-  loading: boolean;
-  error: ApolloError | undefined;
-  refetch: () => void;
 }) => {
   return (
     <div className="p-2 ">

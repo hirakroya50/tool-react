@@ -2,19 +2,17 @@ import { useState } from "react";
 import S3Display from "../components/S3Sub_components/S3Display";
 import S3KeyList from "../components/S3Sub_components/S3KeyList";
 import S3Upload from "../components/S3Sub_components/S3Upload";
-import { gql, useQuery } from "@apollo/client";
+import useListFilesQuery from "@/hooks/useListFilesQuery";
+interface SelectedFileKey {
+  slNo: number;
+  fileKey: string;
+}
 
-const query = gql`
-  query listFiles {
-    listFiles
-  }
-`;
 const S3Service = () => {
-  const [selectDataKey, setSelectDataKey] = useState<{
-    slNo: number;
-    fileKey: string;
-  } | null>(null);
-  const { data, loading, refetch, error } = useQuery(query);
+  const [selectDataKey, setSelectDataKey] = useState<SelectedFileKey | null>(
+    null
+  );
+  const { data, loading, refetch, error } = useListFilesQuery();
 
   return (
     <div className="w-full border flex min-h-full grow">

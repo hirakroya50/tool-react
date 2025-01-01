@@ -1,7 +1,5 @@
 import { useState } from "react";
 
-import { gql, useMutation } from "@apollo/client";
-import axios from "axios";
 import { Button } from "../ui/button";
 import {
   Select,
@@ -11,112 +9,32 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Input } from "../ui/input";
-import { toast } from "react-hot-toast";
 import { Loader } from "lucide-react";
+import { fileFormats } from "@/data/fileFormats";
+import useGeneratePreSignUploadUrl from "@/hooks/useGeneratePreSignUploadUrl";
+import useS3ObjectUploadBySignUrl from "@/hooks/useS3ObjectUploadBySignUrl";
 
-// import { Button } from "@/components/ui/button"
-const fileFormats = [
-  { format: "txt", contentType: "text/plain" },
-  { format: "pdf", contentType: "application/pdf" },
-  {
-    format: "docx",
-    contentType:
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-  },
-  {
-    format: "xlsx",
-    contentType:
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  },
-  {
-    format: "pptx",
-    contentType:
-      "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-  },
-  { format: "jpg", contentType: "image/jpeg" },
-  { format: "jpeg", contentType: "image/jpeg" },
-  { format: "png", contentType: "image/png" },
-  { format: "gif", contentType: "image/gif" },
-  { format: "svg", contentType: "image/svg+xml" },
-  { format: "mp3", contentType: "audio/mpeg" },
-  { format: "wav", contentType: "audio/wav" },
-  { format: "mp4", contentType: "video/mp4" },
-  { format: "mkv", contentType: "video/x-matroska" },
-  { format: "zip", contentType: "application/zip" },
-  { format: "tar", contentType: "application/x-tar" },
-  { format: "json", contentType: "application/json" },
-  { format: "xml", contentType: "application/xml" },
-  { format: "html", contentType: "text/html" },
-  { format: "css", contentType: "text/css" },
-  { format: "js", contentType: "application/javascript" },
-];
-
-const UPLOAD_MUTATION_FOR_UPLOAD_URL = gql`
-  mutation GetUploadUrl($format: String!, $contentType: String!) {
-    getUploadUrl(format: $format, contentType: $contentType)
-  }
-`;
 const S3Upload = ({ refetch }: { refetch: () => void }) => {
   const [selectedFormat, setSelectedFormat] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
   const [uploadUrl, setUploadUrl] = useState("");
-  const [uploadFileUrl, { loading, error }] = useMutation(
-    UPLOAD_MUTATION_FOR_UPLOAD_URL
-  );
   const [uploadingSate, setUploadingState] = useState<boolean>(false);
 
-  const handleGenerateUrl = async () => {
-    if (!selectedFormat) return;
+  //generate a pre sign url
+  const { error, handleGenerateUrl, loading } = useGeneratePreSignUploadUrl({
+    selectedFormat,
+    setUploadUrl,
+  });
 
-    const contentType = fileFormats?.find(
-      (format) => format.format === selectedFormat
-    )?.contentType;
+  //upload the selected file by the url
+  const { handleUpload } = useS3ObjectUploadBySignUrl({
+    file,
+    refetch,
+    setUploadingState,
+    setUploadUrl,
+    uploadUrl,
+  });
 
-    try {
-      const result = await uploadFileUrl({
-        variables: {
-          format: selectedFormat,
-          contentType,
-        },
-      });
-
-      toast.success("Successfully generating upload URL");
-
-      setUploadUrl(result.data.getUploadUrl);
-    } catch (err) {
-      toast.error(" Error generating upload URL!");
-
-      console.error("Error generating upload URL:", err);
-    }
-  };
-
-  const handleUpload = async () => {
-    if (!file || !uploadUrl) {
-      toast.error("file or not upload url");
-      return;
-    }
-
-    setUploadingState(true);
-
-    try {
-      const response = await axios.put(uploadUrl, file, {
-        headers: {
-          "Content-Type": file.type, // Ensure the correct content type is sent
-        },
-      });
-      if (response.status === 200) {
-        toast.success("Successfully uploaded");
-        setUploadUrl("");
-        refetch();
-      } else {
-        toast.error("Error: File upload failed!");
-      }
-    } catch (err) {
-      toast.error("Error: File upload failed!");
-      console.error("Error uploading file:", err);
-    }
-    setUploadingState(false);
-  };
   return (
     <div className="border-b p-2 border-blue-500">
       <div className="border   p-2 rounded-lg bg-yellow-50 shadow-md">
@@ -152,6 +70,8 @@ const S3Upload = ({ refetch }: { refetch: () => void }) => {
           {loading ? "Generating..." : "Generate Upload URL"}
         </Button>
       </div>
+      {error && <div className="text-red-500 mt-2">{error.message}</div>}
+
       {uploadUrl && (
         <div className="mt-1">
           <div className="grid  w-full max-w-sm shadow-md items-center gap-2 p-2 pt-4 bg-red-100  rounded-md ">
@@ -176,8 +96,6 @@ const S3Upload = ({ refetch }: { refetch: () => void }) => {
           </div>
         </div>
       )}
-
-      {error && <div className="text-red-500 mt-2">{error.message}</div>}
     </div>
   );
 };

@@ -1,42 +1,22 @@
 import React from "react";
 
-import { gql, useMutation } from "@apollo/client";
 import { Loader, Trash2 } from "lucide-react";
-import toast from "react-hot-toast";
-
-const DELETE_OBJECT = gql`
-  mutation DeleteFile($fileKey: String!) {
-    deleteFile(fileKey: $fileKey)
-  }
-`;
-const S3ListItemWithDeleteButton = ({
+import { useDeleteFileOnS3 } from "@/hooks/useDeleteFileOnS3";
+interface S3ListItemWithDeleteButtonProps {
+  refetch: () => void;
+  s3key: string;
+  setSelectDataKey: React.Dispatch<
+    React.SetStateAction<{ slNo: number; fileKey: string } | null>
+  >;
+  slNo: number;
+}
+const S3ListItemWithDeleteButton: React.FC<S3ListItemWithDeleteButtonProps> = ({
   refetch,
   s3key,
   setSelectDataKey,
   slNo,
-}: {
-  refetch: () => void;
-  s3key: string;
-  setSelectDataKey: React.Dispatch<
-    React.SetStateAction<{
-      slNo: number;
-      fileKey: string;
-    } | null>
-  >;
-  slNo: number;
 }) => {
-  const [deleteFile, { error, loading }] = useMutation(DELETE_OBJECT);
-  const handleDelete = async (s3key: string) => {
-    try {
-      await deleteFile({ variables: { fileKey: s3key } });
-      toast.success("successfully deleted");
-      refetch();
-      // Add your delete logic here, e.g., call a mutation or API endpoint
-    } catch (error) {
-      toast.error("Error ! not deleted");
-      console.log("eerorr dekte", error);
-    }
-  };
+  const { error, handleDelete, loading } = useDeleteFileOnS3({ refetch });
   return (
     <>
       <div className="flex justify-between items-center border p-1 rounded hover:bg-gray-100">
