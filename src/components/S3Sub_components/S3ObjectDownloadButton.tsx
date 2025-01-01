@@ -8,7 +8,7 @@ const S3ObjectDownloadButton = ({ fileKey }: { fileKey: string }) => {
   return (
     <>
       {downloadStatus && (
-        <div className="fixed bg-red-500 text-white top-32 p-2 px-3  rounded-md opacity-80 flex gap-2">
+        <div className="fixed bg-green-500 text-white top-32 p-2 px-3  rounded-md opacity-80 flex gap-2">
           {" "}
           <Loader className="animate-spin" />
           <span>
