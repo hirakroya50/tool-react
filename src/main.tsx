@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App.tsx";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 const client = new ApolloClient({
-  uri: "http://localhost:3002/graphql",
+  uri: `${import.meta.env.VITE_B_LOGIC_MICROSERVICE_URL}/graphql`,
   cache: new InMemoryCache(),
 });
 createRoot(document.getElementById("root")!).render(

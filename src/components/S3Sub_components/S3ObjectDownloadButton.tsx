@@ -4,10 +4,10 @@ import { Button } from "../ui/button";
 
 const S3ObjectDownloadButton = ({ fileKey }: { fileKey: string }) => {
   const s3 = new S3({
-    region: "us-east-1",
+    region: import.meta.env.VITE_AWS_REGION,
     credentials: {
-      accessKeyId: "AKIASK5MCBLINKCVTJUY",
-      secretAccessKey: "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",
+      accessKeyId: import.meta.env.VITE_ACCESS_KEY_ID,
+      secretAccessKey: import.meta.env.VITE_SECRET_ACCESS_KEY,
     },
   });
 
@@ -28,7 +28,7 @@ const S3ObjectDownloadButton = ({ fileKey }: { fileKey: string }) => {
     if (!fileKey) return;
 
     const getObjectCommand = new GetObjectCommand({
-      Bucket: "privet-bucket-s3-nodejs",
+      Bucket: import.meta.env.VITE_PRIVET_BUCKET_NAME,
       Key: fileKey,
     });
 
