@@ -11,6 +11,8 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Input } from "../ui/input";
+import { toast } from "react-hot-toast";
+import { Loader } from "lucide-react";
 
 // import { Button } from "@/components/ui/button"
 const fileFormats = [
@@ -49,7 +51,7 @@ const fileFormats = [
   { format: "js", contentType: "application/javascript" },
 ];
 
-const UPLOAD_MUTATION = gql`
+const UPLOAD_MUTATION_FOR_UPLOAD_URL = gql`
   mutation GetUploadUrl($format: String!, $contentType: String!) {
     getUploadUrl(format: $format, contentType: $contentType)
   }
@@ -58,8 +60,11 @@ const S3Upload = ({ refetch }: { refetch: () => void }) => {
   const [selectedFormat, setSelectedFormat] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
   const [uploadUrl, setUploadUrl] = useState("");
-  const [uploadFile, { loading, error }] = useMutation(UPLOAD_MUTATION);
+  const [uploadFileUrl, { loading, error }] = useMutation(
+    UPLOAD_MUTATION_FOR_UPLOAD_URL
+  );
   const [uploadingSate, setUploadingState] = useState<boolean>(false);
+
   const handleGenerateUrl = async () => {
     if (!selectedFormat) return;
 
@@ -68,27 +73,28 @@ const S3Upload = ({ refetch }: { refetch: () => void }) => {
     )?.contentType;
 
     try {
-      const result = await uploadFile({
+      const result = await uploadFileUrl({
         variables: {
           format: selectedFormat,
           contentType,
         },
       });
 
-      console.log({
-        selectedFormat,
-        contentType,
-        resulturl: result.data.getUploadUrl,
-      });
+      toast.success("Successfully generating upload URL");
 
       setUploadUrl(result.data.getUploadUrl);
     } catch (err) {
+      toast.error(" Error generating upload URL!");
+
       console.error("Error generating upload URL:", err);
     }
   };
 
   const handleUpload = async () => {
-    if (!file || !uploadUrl) return;
+    if (!file || !uploadUrl) {
+      toast.error("file or not upload url");
+      return;
+    }
 
     console.log({ uploadUrl, file });
     setUploadingState(true);
@@ -101,13 +107,15 @@ const S3Upload = ({ refetch }: { refetch: () => void }) => {
       });
       console.log({ response });
       if (response.status === 200) {
+        toast.success("Successfully uploaded");
+        setUploadUrl("");
         refetch();
       } else {
-        alert("File upload failed!");
+        toast.error("Error: File upload failed!");
       }
     } catch (err) {
+      toast.error("Error: File upload failed!");
       console.error("Error uploading file:", err);
-      alert("File upload failed!");
     }
     setUploadingState(false);
   };
@@ -142,10 +150,10 @@ const S3Upload = ({ refetch }: { refetch: () => void }) => {
               : "bg-blue-500 hover:bg-blue-600"
           }`}
         >
+          {loading && <Loader className="animate-spin" />}
           {loading ? "Generating..." : "Generate Upload URL"}
         </Button>
       </div>
-
       {uploadUrl && (
         <div className="mt-1">
           <div className="grid  w-full max-w-sm shadow-md items-center gap-2 p-2 pt-4 bg-red-100  rounded-md ">
@@ -165,7 +173,8 @@ const S3Upload = ({ refetch }: { refetch: () => void }) => {
               disabled={!file}
               className="bg-green-500 text-white p-2 mt-2"
             >
-              {uploadingSate ? "uploading.." : "Upload"}
+              {uploadingSate && <Loader className="animate-spin" />}
+              {uploadingSate ? "Uploading..." : "Upload"}
             </Button>
           </div>
         </div>

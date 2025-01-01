@@ -10,12 +10,15 @@ const query = gql`
   }
 `;
 const S3Service = () => {
-  const [selectDataKey, setSelectDataKey] = useState<string | null>(null);
+  const [selectDataKey, setSelectDataKey] = useState<{
+    slNo: number;
+    fileKey: string;
+  } | null>(null);
   const { data, loading, refetch, error } = useQuery(query);
 
   return (
     <div className="w-full border flex min-h-full grow">
-      <section className="w-[30vw] border-r border-red-200  ">
+      <section className="w-[30rem] border-r border-red-200  ">
         <S3Upload refetch={refetch} />
         <S3KeyList
           data={data?.listFiles}

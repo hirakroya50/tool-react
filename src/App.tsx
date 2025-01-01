@@ -1,11 +1,18 @@
 import { Routes, Route, Link, BrowserRouter } from "react-router-dom";
 import Home from "./components/Home";
 import S3Service from "./components/S3Service";
+import { Toaster } from "react-hot-toast";
 
 const About = () => <h1>About Page</h1>;
 const App: React.FC = () => {
   return (
     <BrowserRouter>
+      <Toaster
+        position="bottom-right"
+        toastOptions={{
+          duration: 2000,
+        }}
+      />
       <div className="min-h-screen bg-gray-50 flex flex-col">
         <nav className="bg-blue-600  shadow-md">
           <ul className="flex justify-center space-x-8">

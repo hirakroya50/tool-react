@@ -1,6 +1,7 @@
 import React from "react";
 
 import { gql, useMutation } from "@apollo/client";
+import { Loader, Trash2 } from "lucide-react";
 
 const DELETE_OBJECT = gql`
   mutation DeleteFile($fileKey: String!) {
@@ -11,10 +12,17 @@ const S3ListItemWithDeleteButton = ({
   refetch,
   s3key,
   setSelectDataKey,
+  slNo,
 }: {
   refetch: () => void;
   s3key: string;
-  setSelectDataKey: React.Dispatch<React.SetStateAction<string | null>>;
+  setSelectDataKey: React.Dispatch<
+    React.SetStateAction<{
+      slNo: number;
+      fileKey: string;
+    } | null>
+  >;
+  slNo: number;
 }) => {
   const [deleteFile, { data, loading }] = useMutation(DELETE_OBJECT);
   const handleDelete = async (s3key: string) => {
@@ -28,19 +36,23 @@ const S3ListItemWithDeleteButton = ({
     }
   };
   return (
-    <div className="flex justify-between items-center gap-2 border p-2 rounded hover:bg-gray-100">
+    <div className="flex justify-between items-center border p-1 rounded hover:bg-gray-100">
       <span
         title="click to open it "
         className="text-sm font-mono border rounded-md p-1 cursor-pointer hover:bg-blue-500"
-        onClick={() => setSelectDataKey(s3key)}
+        onClick={() => setSelectDataKey({ fileKey: s3key, slNo })}
       >
-        {s3key}
+        No:{slNo + 1}, {s3key}
       </span>
       <button
         onClick={() => handleDelete(s3key)}
-        className="text-white bg-red-500 px-3 py-1 rounded hover:bg-red-600"
+        className=" rounded border p-0.5"
       >
-        {loading ? "loading...." : "Delete"}
+        {loading ? (
+          <Loader className="animate-spin" />
+        ) : (
+          <Trash2 className="text-red-700" />
+        )}
       </button>
     </div>
   );
