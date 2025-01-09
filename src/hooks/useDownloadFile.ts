@@ -27,7 +27,7 @@ const useDownloadFile = (fileKey: string) => {
 
     try {
       const getObjectCommand = new GetObjectCommand({
-        Bucket: import.meta.env.VITE_PRIVET_BUCKET_NAME,
+        Bucket: import.meta.env.VITE_PRIVET_BUCKET_NAME_AWS_S3,
         Key: fileKey,
       });
 
