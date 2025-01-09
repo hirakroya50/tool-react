@@ -2,6 +2,7 @@ import { Routes, Route, Link, BrowserRouter } from "react-router-dom";
 import Home from "./pages/Home";
 import S3Service from "./pages/S3Service";
 import { Toaster } from "react-hot-toast";
+import Serverless from "./pages/Serverless";
 
 const App: React.FC = () => {
   return (
@@ -37,12 +38,21 @@ const App: React.FC = () => {
                 S3
               </Link>
             </li>
+            <li>
+              <Link
+                to="/serverless"
+                className="text-white font-semibold hover:text-blue-300 transition duration-300"
+              >
+                Serverless
+              </Link>
+            </li>
           </ul>
         </nav>
         <div className="grow flex flex-col">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/s3" element={<S3Service />} />
+            <Route path="/serverless" element={<Serverless />} />
           </Routes>
         </div>
       </div>

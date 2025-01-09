@@ -1,10 +1,6 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-
 const Home = () => {
   return (
     <>
-      <TestServerless />
       <div className="mt-10 bg-gray-50 flex flex-col items-center justify-center p-6">
         <header className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">
@@ -42,40 +38,3 @@ const Home = () => {
 };
 
 export default Home;
-
-const TestServerless = () => {
-  const [data, setData] = useState([]);
-  const Foo = async () => {
-    try {
-      const response = await axios.get(
-        import.meta.env.VITE_PUBLIC_SERVERLESS_BACKEND
-      );
-
-      console.log(import.meta.env.VITE_PUBLIC_SERVERLESS_BACKEND);
-      console.log({ response, data: response.data?.data });
-      setData(response.data?.data);
-    } catch (error) {
-      console.log({ error });
-    }
-  };
-
-  useEffect(() => {
-    Foo();
-  }, []);
-  return (
-    <>
-      "vite --port 3000"
-      <div className="border">
-        env filr one data : {import.meta.env.VITE_PUBLIC_SERVERLESS_BACKEND}
-      </div>
-      {data.map((item, i) => {
-        return (
-          <div key={i}>
-            name : {(item as { name: string })?.name}
-            id: {(item as { id: string })?.id}
-          </div>
-        );
-      })}
-    </>
-  );
-};
