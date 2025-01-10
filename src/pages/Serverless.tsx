@@ -21,13 +21,11 @@ const Serverless = () => {
     fetchPosts(); // Await the promise here
   }, [fetchPosts]);
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <h1 className="mb-4 text-center text-2xl font-bold">Post Manager</h1>
-      {loading && <p className="text-center text-blue-500">Loading...</p>}
-      {error && <p className="text-center text-red-500">{error}</p>}
+    <div className=" bg-gray-100 px-6">
+      <h1 className="mb-2 text-center text-2xl font-bold">Post Manager</h1>
 
       {/* Create New Post */}
-      <div className="mb-6 rounded bg-white p-4 shadow">
+      <div className=" rounded bg-white p-4 shadow">
         <h2 className="mb-4 text-xl font-semibold">Create Post</h2>
         <div className="flex items-center gap-4">
           <input
@@ -46,9 +44,15 @@ const Serverless = () => {
         </div>
       </div>
 
+      <div className="h-6">
+        {error && <p className="text-center text-red-500">{error}</p>}
+
+        {loading && <p className="text-center text-blue-500">Loading...</p>}
+      </div>
+
       {/* Display Posts */}
 
-      <div className="h-[calc(100vh-15rem)] overflow-auto rounded bg-white p-4 shadow">
+      <div className="h-[calc(100vh-17rem)] overflow-auto rounded bg-white p-4 shadow">
         <h2 className="mb-4 text-xl font-semibold">
           Total Posts: {posts?.length}{" "}
         </h2>
