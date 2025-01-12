@@ -24,7 +24,7 @@ const staticData = [
 const title =
   "Serverless Cloudflare Worker and AWS S3 CRUD with React Frontend and NestJS Microservice";
 const technologies =
-  "Technologies Used: NestJS, AWS S3, Cloudflare Worker, AWS EC2, NGINX, PM2, React, PostgreSQL, prisma and CloudFront";
+  "Technologies Used: NestJS, Graphql, AWS S3, aws IAM, Cloudflare Worker, AWS EC2, NGINX, PM2, React, PostgreSQL, prisma and CloudFront";
 
 const Home = () => {
   return (
